@@ -1,0 +1,50 @@
+:root {
+  --color-brand: #f97316;
+  --color-brand-600: #ea580c;
+  --color-ink: #111827;
+  --color-muted: #6b7280;
+  --color-surface: #ffffff;
+  --color-surface-2: #f9fafb;
+  --color-border: #e5e7eb;
+  --color-danger: #ef4444;
+  --slots-panel-bg: var(--color-surface-2);
+  /* Fields */
+  --field-bg: #ffffff;
+  --field-border: #e5e7eb;
+  --field-placeholder: #9ca3af;
+}
+
+/* Dark theme overrides */
+[data-theme='dark'] {
+  --color-ink: #e9edef;
+  --color-muted: #9aa3ac;
+  --color-surface: #1f2328;
+  --color-surface-2: #242a31;
+  --color-border: #36414a;
+  --slots-panel-bg: #242a31;
+  /* Dimmer fields for dark, slightly lighter than panel */
+  --field-bg: #2c333a;
+  --field-border: #3a434c;
+  --field-placeholder: #9aa3ac;
+  /* Brand stays the same for identity */
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
