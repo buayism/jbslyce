@@ -132,6 +132,9 @@ function Home() {
       }
     };
     loadBarbers();
+    // Refresh barbers list every 10 seconds
+    const interval = setInterval(loadBarbers, 10000);
+    return () => clearInterval(interval);
   }, []);
 
   const handlePick = (service) => {

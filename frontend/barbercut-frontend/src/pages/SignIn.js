@@ -31,11 +31,11 @@ function SignIn() {
           to = saved;
           sessionStorage.removeItem('bc_post_login_redirect');
         }
-      } catch {}
+      } catch { }
       if (to === '/') {
         if (profile?.role === 'ADMIN') to = '/admin/dashboard';
-        else if (profile?.role === 'BARBER') to = '/barber/dashboard';
         else if (profile?.role === 'CLIENT') to = '/client/dashboard';
+        // Barbers go to home page (/) to see their personalized view
       }
       navigate(to);
     } catch (err) {
@@ -47,19 +47,24 @@ function SignIn() {
 
   return (
     <div className="home">
-      <div className="bc-container">
-        <div className="panel auth-panel">
+      <div className="bc-container" style={{ paddingTop: 60, paddingBottom: 60 }}>
+        <div className="signin-card">
           <h2 className="selection-title">Welcome Back</h2>
-          <form onSubmit={onSubmit} className="auth-form">
-            {error && <div className="auth-error">{error}</div>}
+          <p className="muted" style={{ textAlign: 'center', marginBottom: 24 }}>
+            Sign in to your account to continue
+          </p>
+
+          {error && <div className="auth-error" style={{ marginBottom: 16 }}>{error}</div>}
+
+          <form onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <label>
               <span>Login as</span>
               <select name="role" value={form.role} onChange={onChange}>
                 <option value="CLIENT">Client</option>
                 <option value="BARBER">Barber</option>
-                <option value="ADMIN">Admin</option>
               </select>
             </label>
+
             <label>
               <span>Username</span>
               <input
@@ -71,6 +76,7 @@ function SignIn() {
                 required
               />
             </label>
+
             <label>
               <span>Password</span>
               <input
@@ -82,12 +88,14 @@ function SignIn() {
                 required
               />
             </label>
-            <button className="btn btn-primary next" type="submit" disabled={loading}>
+
+            <button className="btn btn-primary" type="submit" disabled={loading} style={{ marginTop: 8 }}>
               {loading ? 'Logging in…' : 'Login'}
             </button>
           </form>
-          <div className="auth-alt">
-            <span className="muted">Don’t have an account?</span>{' '}
+
+          <div className="auth-alt" style={{ marginTop: 24, textAlign: 'center' }}>
+            <span className="muted">Don't have an account?</span>{' '}
             <Link to="/signup">Sign Up</Link>
           </div>
         </div>

@@ -58,7 +58,7 @@ export default function AdminBarbers() {
           }
           setBookCounts(counts);
         }
-      } catch {}
+      } catch { }
     };
     loadExtras();
   }, []);
@@ -91,7 +91,7 @@ export default function AdminBarbers() {
 
   const formatDate = (iso) => {
     if (!iso) return '—';
-    try { return new Date(iso).toISOString().slice(0,10); } catch { return '—'; }
+    try { return new Date(iso).toISOString().slice(0, 10); } catch { return '—'; }
   };
 
   const StatusPill = ({ value }) => {
@@ -99,9 +99,9 @@ export default function AdminBarbers() {
     const color = v === 'approved' ? '#16a34a' : v === 'rejected' ? '#ef4444' : '#f59e0b';
     const bg = v === 'approved' ? 'rgba(22,163,74,0.15)' : v === 'rejected' ? 'rgba(239,68,68,0.15)' : 'rgba(245,158,11,0.15)';
     return (
-      <span style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'4px 10px', borderRadius:999, background:bg, color, fontWeight:700 }}>
-        <span style={{ width:8, height:8, borderRadius:'50%', background:color }} />
-        <span style={{ textTransform:'capitalize' }}>{value}</span>
+      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '4px 10px', borderRadius: 999, background: bg, color, fontWeight: 700 }}>
+        <span style={{ width: 8, height: 8, borderRadius: '50%', background: color }} />
+        <span style={{ textTransform: 'capitalize' }}>{value}</span>
       </span>
     );
   };
@@ -139,136 +139,145 @@ export default function AdminBarbers() {
 
   return (
     <div>
-      <div style={{ textAlign:'left', marginBottom:12 }}>
-        <h2 style={{ margin:'0 0 6px', fontSize:28, fontWeight:800 }}>Manage Barbers</h2>
+      <div style={{ textAlign: 'left', marginBottom: 12 }}>
+        <h2 style={{ margin: '0 0 6px', fontSize: 28, fontWeight: 800 }}>Manage Barbers</h2>
         <div className="muted">View or manage all barbers.</div>
       </div>
       {loading && <p className="muted">Loading barbers...</p>}
       {error && <p className="error">{error}</p>}
       {!loading && !error && (
-      <>
-        <div className="card" style={{ padding:12, marginBottom:12, background:'var(--color-surface-2)', color:'var(--color-ink)' }}>
-          <div style={{ display:'flex', gap:10, flexWrap:'wrap', alignItems:'center' }}>
-            <div style={{ flex:'1 1 280px' }}>
-              <input type="text" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search barbers by name or email..." />
-            </div>
-            <div>
-              <select value={statusFilter} onChange={e=>setStatusFilter(e.target.value)}>
-                <option value="All">Status: All</option>
-                <option value="approved">Approved</option>
-                <option value="pending">Pending</option>
-                <option value="rejected">Rejected</option>
-              </select>
-            </div>
-            <div>
-              <select value={sortBy} onChange={e=>setSortBy(e.target.value)}>
-                <option value="DATE_NEWEST">Sort: Date added (Newest)</option>
-                <option value="DATE_OLDEST">Sort: Date added (Oldest)</option>
-                <option value="MOST_BOOKED">Sort: Most booked</option>
-              </select>
+        <>
+          <div className="card" style={{ padding: 12, marginBottom: 12, background: 'var(--color-surface-2)', color: 'var(--color-ink)' }}>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+              <div style={{ flex: '1 1 280px' }}>
+                <input type="text" value={query} onChange={e => setQuery(e.target.value)} placeholder="Search barbers by name or email..." />
+              </div>
+              <div>
+                <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
+                  <option value="All">Status: All</option>
+                  <option value="approved">Approved</option>
+                  <option value="pending">Pending</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              </div>
+              <div>
+                <select value={sortBy} onChange={e => setSortBy(e.target.value)}>
+                  <option value="DATE_NEWEST">Sort: Date added (Newest)</option>
+                  <option value="DATE_OLDEST">Sort: Date added (Oldest)</option>
+                  <option value="MOST_BOOKED">Sort: Most booked</option>
+                </select>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="card" style={{ padding: 0, background:'var(--color-surface-2)', color:'var(--color-ink)' }}>
-          <div style={{ overflowX:'auto' }}>
-            <table style={{ width:'100%', borderCollapse:'separate', borderSpacing:0 }}>
-              <thead>
-                <tr style={{ textAlign:'left', background:'var(--color-surface-2)', borderBottom:'2px solid var(--color-brand)' }}>
-                  <th style={{ padding:12, color:'var(--color-brand)', fontWeight:800, textTransform:'uppercase', fontSize:12, letterSpacing:0.6 }}></th>
-                  <th style={{ padding:12, color:'var(--color-brand)', fontWeight:800, textTransform:'uppercase', fontSize:12, letterSpacing:0.6 }}>Name</th>
-                  <th style={{ padding:12, color:'var(--color-brand)', fontWeight:800, textTransform:'uppercase', fontSize:12, letterSpacing:0.6 }}>Email</th>
-                  <th style={{ padding:12, color:'var(--color-brand)', fontWeight:800, textTransform:'uppercase', fontSize:12, letterSpacing:0.6 }}>Status</th>
-                  <th style={{ padding:12, color:'var(--color-brand)', fontWeight:800, textTransform:'uppercase', fontSize:12, letterSpacing:0.6 }}>Date Joined</th>
-                  <th style={{ padding:12, color:'var(--color-brand)', fontWeight:800, textTransform:'uppercase', fontSize:12, letterSpacing:0.6 }}>Bookings</th>
-                  <th style={{ padding:12, color:'var(--color-brand)', fontWeight:800, textTransform:'uppercase', fontSize:12, letterSpacing:0.6, textAlign:'right' }}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredSorted.length === 0 ? (
-                  <tr>
-                    <td colSpan="7" style={{ padding:12 }} className="muted">No barbers found</td>
+          <div className="card" style={{ padding: 0, background: 'var(--color-surface-2)', color: 'var(--color-ink)' }}>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0 }}>
+                <thead>
+                  <tr style={{ textAlign: 'left', background: 'var(--color-surface-2)', borderBottom: '2px solid var(--color-brand)' }}>
+                    <th style={{ padding: 12, color: 'var(--color-brand)', fontWeight: 800, textTransform: 'uppercase', fontSize: 12, letterSpacing: 0.6 }}></th>
+                    <th style={{ padding: 12, color: 'var(--color-brand)', fontWeight: 800, textTransform: 'uppercase', fontSize: 12, letterSpacing: 0.6 }}>Name</th>
+                    <th style={{ padding: 12, color: 'var(--color-brand)', fontWeight: 800, textTransform: 'uppercase', fontSize: 12, letterSpacing: 0.6 }}>Email</th>
+                    <th style={{ padding: 12, color: 'var(--color-brand)', fontWeight: 800, textTransform: 'uppercase', fontSize: 12, letterSpacing: 0.6 }}>Status</th>
+                    <th style={{ padding: 12, color: 'var(--color-brand)', fontWeight: 800, textTransform: 'uppercase', fontSize: 12, letterSpacing: 0.6 }}>Date Joined</th>
+                    <th style={{ padding: 12, color: 'var(--color-brand)', fontWeight: 800, textTransform: 'uppercase', fontSize: 12, letterSpacing: 0.6 }}>Bookings</th>
+                    <th style={{ padding: 12, color: 'var(--color-brand)', fontWeight: 800, textTransform: 'uppercase', fontSize: 12, letterSpacing: 0.6, textAlign: 'right' }}>Actions</th>
                   </tr>
-                ) : (
-                  filteredSorted.map(b => (
-                    <tr
-                      key={b.id}
-                      onMouseEnter={() => setHovered(b.id)}
-                      onMouseLeave={() => setHovered(null)}
-                      onClick={() => setModal(b)}
-                      title="Click to view profile picture"
-                      style={{ borderTop:'1px solid var(--color-border)', cursor:'pointer', background: hovered === b.id ? 'rgba(59,130,246,0.08)' : 'transparent', boxShadow: hovered === b.id ? 'inset 3px 0 0 var(--color-brand)' : undefined }}
-                    >
-                      <td style={{ padding:12 }} onClick={(e)=>e.stopPropagation()}><input type="checkbox" aria-label={`Select ${b.name}`} onClick={(e)=>e.stopPropagation()} /></td>
-                      <td style={{ padding:12 }}>
-                        <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-                          <div 
-                            className="avatar" 
-                            style={{ 
-                              width:36, 
-                              height:36, 
-                              borderRadius:'50%', 
-                              background:'var(--color-surface-2)',
-                              backgroundImage: b.avatar ? `url(${mediaUrl(b.avatar)})` : undefined,
-                              backgroundSize:'cover',
-                              backgroundPosition:'center'
-                            }} 
-                          />
-                          <div>
-                            <div style={{ fontWeight:700 }}>{b.name}</div>
-                            <div className="muted" style={{ fontSize:12 }}>{b.phone || '—'}</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td style={{ padding:12 }}>{b.email || '—'}</td>
-                      <td style={{ padding:12 }}><StatusPill value={b.status} /></td>
-                      <td style={{ padding:12 }}>{formatDate(createdMap[b.id])}</td>
-                      <td style={{ padding:12 }}>{bookCounts[b.id] || 0}</td>
-                      <td style={{ padding:12, textAlign:'right' }} onClick={(e)=>e.stopPropagation()}>
-                        <div style={{ display:'flex', gap:8, justifyContent:'flex-end', visibility: hovered === b.id ? 'visible' : 'hidden' }}>
-                          <button className="btn sm" onClick={(e)=>{e.stopPropagation(); handleDelete(b.id);}}>Delete</button>
-                        </div>
-                      </td>
+                </thead>
+                <tbody>
+                  {filteredSorted.length === 0 ? (
+                    <tr>
+                      <td colSpan="7" style={{ padding: 12 }} className="muted">No barbers found</td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ) : (
+                    filteredSorted.map(b => (
+                      <tr
+                        key={b.id}
+                        onMouseEnter={() => setHovered(b.id)}
+                        onMouseLeave={() => setHovered(null)}
+                        onClick={() => setModal(b)}
+                        title="Click to view profile picture"
+                        style={{ borderTop: '1px solid var(--color-border)', cursor: 'pointer', background: hovered === b.id ? 'rgba(59,130,246,0.08)' : 'transparent', boxShadow: hovered === b.id ? 'inset 3px 0 0 var(--color-brand)' : undefined }}
+                      >
+                        <td style={{ padding: 12 }} onClick={(e) => e.stopPropagation()}><input type="checkbox" aria-label={`Select ${b.name}`} onClick={(e) => e.stopPropagation()} /></td>
+                        <td style={{ padding: 12 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                            <div
+                              className="avatar"
+                              style={{
+                                width: 36,
+                                height: 36,
+                                borderRadius: '50%',
+                                background: 'var(--color-surface-2)',
+                                backgroundImage: b.avatar ? `url(${mediaUrl(b.avatar)})` : undefined,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center'
+                              }}
+                            />
+                            <div>
+                              <div style={{ fontWeight: 700 }}>{b.name}</div>
+                              <div className="muted" style={{ fontSize: 12 }}>{b.phone || '—'}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td style={{ padding: 12 }}>{b.email || '—'}</td>
+                        <td style={{ padding: 12 }}><StatusPill value={b.status} /></td>
+                        <td style={{ padding: 12 }}>{formatDate(createdMap[b.id])}</td>
+                        <td style={{ padding: 12 }}>{bookCounts[b.id] || 0}</td>
+                        <td style={{ padding: 12, textAlign: 'right' }} onClick={(e) => e.stopPropagation()}>
+                          <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', visibility: hovered === b.id ? 'visible' : 'hidden' }}>
+                            {b.status && b.status.toLowerCase() === 'pending' && (
+                              <button
+                                className="btn btn-primary sm"
+                                onClick={(e) => { e.stopPropagation(); handleApprove(b.id); }}
+                                title="Approve barber"
+                              >
+                                ✓ Approve
+                              </button>
+                            )}
+                            <button className="btn sm" onClick={(e) => { e.stopPropagation(); handleDelete(b.id); }}>Delete</button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-      </>
+        </>
       )}
 
       {modal && (
-        <div onClick={() => setModal(null)} style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:1000 }}>
-          <div onClick={(e)=>e.stopPropagation()} style={{ width:'100%', maxWidth: 720, background:'var(--color-surface)', color:'var(--color-ink)', borderRadius:16, padding:18, boxShadow:'0 20px 60px rgba(0,0,0,0.45)', border:'1px solid var(--color-border)', position:'relative' }}>
-            <button onClick={() => setModal(null)} className="btn sm" style={{ position:'absolute', right:12, top:12 }}>×</button>
-            <div style={{ textAlign:'center' }}>
+        <div onClick={() => setModal(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+          <div onClick={(e) => e.stopPropagation()} style={{ width: '100%', maxWidth: 720, background: 'var(--color-surface)', color: 'var(--color-ink)', borderRadius: 16, padding: 18, boxShadow: '0 20px 60px rgba(0,0,0,0.45)', border: '1px solid var(--color-border)', position: 'relative' }}>
+            <button onClick={() => setModal(null)} className="btn sm" style={{ position: 'absolute', right: 12, top: 12 }}>×</button>
+            <div style={{ textAlign: 'center' }}>
               {modal.avatar ? (
-                <img 
-                  src={mediaUrl(modal.avatar)} 
+                <img
+                  src={mediaUrl(modal.avatar)}
                   alt="Profile"
-                  style={{ maxWidth:'100%', maxHeight:'60vh', display:'block', margin:'0 auto 10px', borderRadius:12, border:'2px solid var(--color-border)', objectFit:'contain' }}
+                  style={{ maxWidth: '100%', maxHeight: '60vh', display: 'block', margin: '0 auto 10px', borderRadius: 12, border: '2px solid var(--color-border)', objectFit: 'contain' }}
                 />
               ) : (
-                <div 
-                  style={{ 
-                    width: 120, 
-                    height: 120, 
-                    borderRadius: '50%', 
-                    margin: '0 auto 10px', 
-                    background: 'var(--color-surface-2)', 
+                <div
+                  style={{
+                    width: 120,
+                    height: 120,
+                    borderRadius: '50%',
+                    margin: '0 auto 10px',
+                    background: 'var(--color-surface-2)',
                     border: '2px solid var(--color-border)'
-                  }} 
+                  }}
                 />
               )}
-              <h3 style={{ margin:'8px 0 6px' }}>{modal.name} ✂️</h3>
-              <p className="muted" style={{ margin:0 }}>{modal.bio || 'No bio available.'}</p>
-              <div style={{ marginTop: 10, fontWeight:700, textTransform:'capitalize' }}>
+              <h3 style={{ margin: '8px 0 6px' }}>{modal.name} ✂️</h3>
+              <p className="muted" style={{ margin: 0 }}>{modal.bio || 'No bio available.'}</p>
+              <div style={{ marginTop: 10, fontWeight: 700, textTransform: 'capitalize' }}>
                 Status: <span style={{ color: modal.status === 'approved' ? '#10b981' : modal.status === 'rejected' ? '#ef4444' : '#f59e0b' }}>{modal.status}</span>
               </div>
             </div>
-            <div style={{ textAlign:'center', marginTop:16 }}>
+            <div style={{ textAlign: 'center', marginTop: 16 }}>
               <button className="btn btn-secondary" onClick={() => setModal(null)}>Close</button>
             </div>
           </div>

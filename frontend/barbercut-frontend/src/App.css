@@ -325,7 +325,7 @@ button.card, .card.clickable { color: var(--color-ink); background: var(--color-
 
 /* --- About page --- */
 .about-hero { padding: 36px 0 18px; text-align: center; }
-.about-hero h1 { margin: 0 0 6px; font-size: 36px; }
+.about-hero h1 { margin: 0 0 6px; font-size: 36px; color: var(--color-ink); }
 .about-hero .muted { font-size: 16px; }
 
 .about-story { background: var(--color-surface-2); color: var(--color-ink); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); }
@@ -454,5 +454,51 @@ button.card, .card.clickable { color: var(--color-ink); background: var(--color-
   .map-container {
     height: 300px;
   }
+}
+
+
+/* Sign In Page */
+.signin-card {
+  max-width: 460px;
+  margin: 0 auto;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.signin-card .selection-title {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.auth-error {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #fecaca;
+  font-size: 14px;
+}
+
+[data-theme='dark'] .auth-error {
+  background: #7f1d1d;
+  color: #fecaca;
+  border-color: #991b1b;
+}
+
+.auth-alt {
+  font-size: 14px;
+}
+
+.auth-alt a {
+  color: var(--color-brand);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.auth-alt a:hover {
+  text-decoration: underline;
 }
 
