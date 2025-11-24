@@ -20,9 +20,9 @@ function Home() {
   const [reservations, setReservations] = useState([]);
   const [selectedBarber, setSelectedBarber] = useState(null);
   const fmt2 = (n) => (n < 10 ? `0${n}` : String(n));
-  const todayLocal = (() => { const d = new Date(); const y = d.getFullYear(); const m = fmt2(d.getMonth()+1); const dd = fmt2(d.getDate()); return `${y}-${m}-${dd}`; })();
+  const todayLocal = (() => { const d = new Date(); const y = d.getFullYear(); const m = fmt2(d.getMonth() + 1); const dd = fmt2(d.getDate()); return `${y}-${m}-${dd}`; })();
   const currentHHMM = () => { const d = new Date(); return `${fmt2(d.getHours())}:${fmt2(d.getMinutes())}`; };
-  const toYMD = (d) => `${d.getFullYear()}-${fmt2(d.getMonth()+1)}-${fmt2(d.getDate())}`;
+  const toYMD = (d) => `${d.getFullYear()}-${fmt2(d.getMonth() + 1)}-${fmt2(d.getDate())}`;
   const toHHMM = (d) => `${fmt2(d.getHours())}:${fmt2(d.getMinutes())}`;
   const [timeMin, setTimeMin] = useState('00:00');
   const timeRef = useRef(null);
@@ -90,7 +90,7 @@ function Home() {
     if (!slotForm.time && minVal) {
       setSlotForm(prev => ({ ...prev, time: minVal }));
       // focus after microtask
-      setTimeout(() => { try { timeRef.current && timeRef.current.focus(); } catch {} }, 0);
+      setTimeout(() => { try { timeRef.current && timeRef.current.focus(); } catch { } }, 0);
     }
   }, [slots, slotForm.date]);
 
@@ -143,7 +143,7 @@ function Home() {
     if (!hasReservation && !window.confirm('Are you sure you want to delete this slot?')) {
       return;
     }
-    
+
     if (hasReservation) {
       if (!window.confirm('This slot has a reservation. Deleting it will make the slot unavailable for new bookings. Continue?')) {
         return;
@@ -164,7 +164,7 @@ function Home() {
         <section
           className="hero"
           style={{
-            position:'relative',
+            position: 'relative',
             minHeight: 320,
             backgroundImage: `url(${process.env.PUBLIC_URL || ''}/hero.jpg)`,
             backgroundSize: 'cover',
@@ -172,22 +172,22 @@ function Home() {
             backgroundRepeat: 'no-repeat'
           }}
         >
-          <div className="hero__overlay" style={{ position:'absolute', inset:0, background:'linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45))' }} />
-          <div className="hero__content bc-container" style={{ position:'relative', zIndex:1, padding:'60px 0', textAlign:'center', color:'#fff' }}>
-            <h1 style={{ fontSize:36, fontWeight:800, marginBottom:8, textShadow:'0 2px 6px rgba(0,0,0,.5)' }}>Welcome back {user.username}</h1>
-            <p style={{ fontSize:18, opacity:.95, marginBottom:16 }}>Manage your schedule and client requests.</p>
-            <div style={{ display:'flex', gap:12, flexWrap:'wrap', justifyContent:'center' }}>
-              <a href="/#slots" className="btn btn-primary" style={{ background:'#f97316', borderColor:'#ea580c', color:'#111827', fontWeight:700, padding:'10px 18px', borderRadius:10 }}>Create Slots</a>
-              <Link to="/barber/dashboard" className="btn btn-secondary" style={{ padding:'10px 18px', borderRadius:10 }}>View Pending Reservations</Link>
+          <div className="hero__overlay" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45))' }} />
+          <div className="hero__content bc-container" style={{ position: 'relative', zIndex: 1, padding: '60px 0', textAlign: 'center', color: '#fff' }}>
+            <h1 style={{ fontSize: 36, fontWeight: 800, marginBottom: 8, textShadow: '0 2px 6px rgba(0,0,0,.5)' }}>Welcome back {user.username}</h1>
+            <p style={{ fontSize: 18, opacity: .95, marginBottom: 16 }}>Manage your schedule and client requests.</p>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
+              <a href="/#slots" className="btn btn-primary" style={{ background: '#f97316', borderColor: '#ea580c', color: '#111827', fontWeight: 700, padding: '10px 18px', borderRadius: 10 }}>Create Slots</a>
+              <Link to="/barber/dashboard" className="btn btn-secondary" style={{ padding: '10px 18px', borderRadius: 10 }}>View Pending Reservations</Link>
             </div>
           </div>
         </section>
 
         <section className="bc-container" style={{ paddingTop: 24 }}>
           <div className="panel">
-            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h2 className="selection-title" style={{ marginBottom: 0 }}>Quick Actions</h2>
-              <div style={{ display:'flex', gap:8 }}>
+              <div style={{ display: 'flex', gap: 8 }}>
                 <a href="/#slots" className="btn btn-primary sm">Create Slots</a>
                 <Link to="/barber/dashboard" className="btn btn-secondary sm">Pending</Link>
               </div>
@@ -214,7 +214,7 @@ function Home() {
                   setCreating(true);
                   setSError('');
                   const sel = new Date(`${slotForm.date}T00:00:00`);
-                  const nowd = new Date(); nowd.setHours(0,0,0,0);
+                  const nowd = new Date(); nowd.setHours(0, 0, 0, 0);
                   if (sel < nowd) { setSError('Date cannot be in the past.'); setCreating(false); return; }
                   const startLocal = new Date(`${slotForm.date}T${slotForm.time}:00`);
                   const now = new Date();
@@ -227,13 +227,13 @@ function Home() {
                   // optimistic update: append and sort by start
                   setSlots(prev => {
                     const next = [...prev, created];
-                    next.sort((a,b) => new Date(a.start) - new Date(b.start));
+                    next.sort((a, b) => new Date(a.start) - new Date(b.start));
                     return next;
                   });
                   // Move picker to the next available time (end of created)
                   const nextTime = toHHMM(new Date(created.end));
                   setSlotForm(prev => ({ ...prev, time: nextTime }));
-                  setTimeout(() => { try { timeRef.current && timeRef.current.focus(); } catch {} }, 0);
+                  setTimeout(() => { try { timeRef.current && timeRef.current.focus(); } catch { } }, 0);
                 } catch (err) {
                   setSError(err.message || 'Failed to create slot');
                 } finally {
@@ -244,31 +244,31 @@ function Home() {
               style={{ marginBottom: 16 }}
             >
               {sError && <div className="auth-error" style={{ marginBottom: 12 }}>{sError}</div>}
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr auto', gap: 8, alignItems:'end' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: 8, alignItems: 'end' }}>
                 <label>
                   <span>Date</span>
                   <input type="date" name="date" value={slotForm.date}
-                         min={todayLocal}
-                         onChange={(e)=>setSlotForm({ ...slotForm, date: e.target.value })} required disabled={!user?.barberId} />
+                    min={todayLocal}
+                    onChange={(e) => setSlotForm({ ...slotForm, date: e.target.value })} required disabled={!user?.barberId} />
                 </label>
                 <label>
                   <span>Start Time</span>
                   <input ref={timeRef} type="time" name="time" value={slotForm.time}
-                         min={timeMin}
-                         onChange={(e)=>setSlotForm({ ...slotForm, time: e.target.value })} required disabled={!user?.barberId} />
+                    min={timeMin}
+                    onChange={(e) => setSlotForm({ ...slotForm, time: e.target.value })} required disabled={!user?.barberId} />
                 </label>
                 <label>
                   <span>Duration (mins)</span>
                   <input type="number" min="5" step="5" name="duration" value={slotForm.duration}
-                         onChange={(e)=>setSlotForm({ ...slotForm, duration: e.target.value })} required disabled={!user?.barberId} />
+                    onChange={(e) => setSlotForm({ ...slotForm, duration: e.target.value })} required disabled={!user?.barberId} />
                 </label>
-                <div style={{ alignSelf:'end' }}>
+                <div style={{ alignSelf: 'end' }}>
                   <button className="btn btn-primary" type="submit" disabled={!user?.barberId || creating || !slotForm.date || !slotForm.time}>
                     {creating ? 'Creating…' : 'Add Slot'}
                   </button>
                 </div>
               </div>
-              <div className="muted" style={{ fontSize:12, marginTop:8 }}>Next available start: {timeMin}</div>
+              <div className="muted" style={{ fontSize: 12, marginTop: 8 }}>Next available start: {timeMin}</div>
             </form>
 
             <div>
@@ -333,7 +333,7 @@ function Home() {
       <section
         className="hero"
         style={{
-          position:'relative',
+          position: 'relative',
           minHeight: 360,
           backgroundImage: `url(${process.env.PUBLIC_URL || ''}/hero.jpg)`,
           backgroundSize: 'cover',
@@ -341,11 +341,11 @@ function Home() {
           backgroundRepeat: 'no-repeat'
         }}
       >
-        <div className="hero__overlay" style={{ position:'absolute', inset:0, background:'linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45))' }} />
-        <div className="hero__content bc-container" style={{ position:'relative', zIndex:1, padding:'80px 0', textAlign:'center', color:'#fff' }}>
-          <h1 style={{ fontSize:40, fontWeight:900, marginBottom:10, textShadow:'0 3px 8px rgba(0,0,0,.55)' }}>Book your next Perfect Cut</h1>
-          <p style={{ fontSize:18, opacity:.95, marginBottom:18 }}>online booking with your favorite local barbers</p>
-          <Link to="/services" className="btn btn-primary" style={{ background:'#f97316', borderColor:'#ea580c', color:'#111827', fontWeight:700, padding:'12px 28px', borderRadius:12 }}>Book Now</Link>
+        <div className="hero__overlay" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45))' }} />
+        <div className="hero__content bc-container" style={{ position: 'relative', zIndex: 1, padding: '80px 0', textAlign: 'center', color: '#fff' }}>
+          <h1 style={{ fontSize: 40, fontWeight: 900, marginBottom: 10, textShadow: '0 3px 8px rgba(0,0,0,.55)' }}>Book your next Perfect Cut</h1>
+          <p style={{ fontSize: 18, opacity: .95, marginBottom: 18 }}>online booking with your favorite local barbers</p>
+          <Link to="/services" className="btn btn-primary" style={{ background: '#f97316', borderColor: '#ea580c', color: '#111827', fontWeight: 700, padding: '12px 28px', borderRadius: 12 }}>Book Now</Link>
         </div>
       </section>
 
@@ -386,13 +386,13 @@ function Home() {
                 key={b.id}
                 className="card clickable barber-card"
                 onClick={() => setSelectedBarber(b)}
-                style={{ textAlign:'center' }}
+                style={{ textAlign: 'center' }}
               >
-                <div className="avatar" style={{ width: 96, height: 96, borderRadius: '50%', margin: '0 auto 10px', background: 'var(--color-surface-2)', border: '2px solid var(--color-border)', backgroundImage: b.avatarUrl ? `url(${mediaUrl(b.avatarUrl)})` : undefined, backgroundSize:'cover', backgroundPosition:'center' }} />
+                <div className="avatar" style={{ width: 96, height: 96, borderRadius: '50%', margin: '0 auto 10px', background: 'var(--color-surface-2)', border: '2px solid var(--color-border)', backgroundImage: b.avatarUrl ? `url(${mediaUrl(b.avatarUrl)})` : undefined, backgroundSize: 'cover', backgroundPosition: 'center' }} />
                 <h4 style={{ marginBottom: 6 }}>{b.name}</h4>
                 <p className="muted" style={{ marginBottom: 8 }}>{b.bio || 'Barber'}</p>
-                <div style={{ color:'#facc15', fontWeight:700 }}>
-                  {(b.ratingAvg || 0).toFixed(1)} ⭐ <span className="muted" style={{ color:'#9ca3af', fontWeight:400 }}>({b.ratingCount || 0} reviews)</span>
+                <div style={{ color: '#facc15', fontWeight: 700 }}>
+                  {(b.ratingAvg || 0).toFixed(1)} ⭐ <span className="muted" style={{ color: '#9ca3af', fontWeight: 400 }}>({b.ratingCount || 0} reviews)</span>
                 </div>
               </button>
             ))}
@@ -402,18 +402,18 @@ function Home() {
 
       {/* Barber modal */}
       {selectedBarber && (
-        <div onClick={() => setSelectedBarber(null)} style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:1000 }}>
-          <div onClick={e => e.stopPropagation()} style={{ width:'100%', maxWidth: 420, background:'var(--color-surface)', color:'var(--color-ink)', borderRadius:16, padding:18, boxShadow:'0 20px 60px rgba(0,0,0,0.45)', border:'1px solid var(--color-border)' }}>
-            <button onClick={() => setSelectedBarber(null)} className="btn sm" style={{ position:'absolute', transform:'translateY(-50%)', right: 12, top: 18 }}>×</button>
-            <div style={{ textAlign:'center', paddingTop:12 }}>
-              <div style={{ width: 120, height: 120, borderRadius: '50%', margin: '0 auto 10px', background: 'var(--color-surface-2)', border: '2px solid var(--color-border)', backgroundImage: selectedBarber.avatarUrl ? `url(${mediaUrl(selectedBarber.avatarUrl)})` : undefined, backgroundSize:'cover', backgroundPosition:'center' }} />
+        <div onClick={() => setSelectedBarber(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+          <div onClick={e => e.stopPropagation()} style={{ width: '100%', maxWidth: 420, background: 'var(--color-surface)', color: 'var(--color-ink)', borderRadius: 16, padding: 18, boxShadow: '0 20px 60px rgba(0,0,0,0.45)', border: '1px solid var(--color-border)' }}>
+            <button onClick={() => setSelectedBarber(null)} className="btn sm" style={{ position: 'absolute', transform: 'translateY(-50%)', right: 12, top: 18 }}>×</button>
+            <div style={{ textAlign: 'center', paddingTop: 12 }}>
+              <div style={{ width: 120, height: 120, borderRadius: '50%', margin: '0 auto 10px', background: 'var(--color-surface-2)', border: '2px solid var(--color-border)', backgroundImage: selectedBarber.avatarUrl ? `url(${mediaUrl(selectedBarber.avatarUrl)})` : undefined, backgroundSize: 'cover', backgroundPosition: 'center' }} />
               <h3 style={{ margin: '8px 0 6px' }}>{selectedBarber.name} ✂️</h3>
               <p className="muted" style={{ margin: 0 }}>{selectedBarber.bio || 'Barber'}</p>
-              <div style={{ marginTop: 10, fontWeight:700, color:'#facc15' }}>
-                {(selectedBarber.ratingAvg || 0).toFixed(1)} ⭐ <span className="muted" style={{ color:'#9ca3af', fontWeight:400 }}>(based on {selectedBarber.ratingCount || 0} reviews)</span>
+              <div style={{ marginTop: 10, fontWeight: 700, color: '#facc15' }}>
+                {(selectedBarber.ratingAvg || 0).toFixed(1)} ⭐ <span className="muted" style={{ color: '#9ca3af', fontWeight: 400 }}>(based on {selectedBarber.ratingCount || 0} reviews)</span>
               </div>
             </div>
-            <div style={{ textAlign:'center', marginTop: 16 }}>
+            <div style={{ textAlign: 'center', marginTop: 16 }}>
               <button className="btn btn-secondary" onClick={() => setSelectedBarber(null)}>Close</button>
             </div>
           </div>
@@ -422,8 +422,41 @@ function Home() {
 
       <section className="testimonials bc-container">
         <h2>Client Testimonials</h2>
-        <div className="testimonial-track">
-          <div className="testimonial">“The best haircut I've ever had! Easy booking and friendly staff.” — John D.</div>
+        <div className="testimonials-grid">
+          {[
+            {
+              id: 1,
+              name: "Michael R.",
+              text: "Absolutely the best fade I've had in years. The attention to detail is unmatched!",
+              rating: 5,
+              avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+            },
+            {
+              id: 2,
+              name: "David K.",
+              text: "Great atmosphere and professional service. Booking online made it so convenient.",
+              rating: 5,
+              avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+            },
+            {
+              id: 3,
+              name: "James L.",
+              text: "Found my new go-to barber. Highly recommend the luxury shave package!",
+              rating: 5,
+              avatar: "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+            }
+          ].map(t => (
+            <div key={t.id} className="testimonial-card">
+              <div className="testimonial-header">
+                <img src={t.avatar} alt={t.name} className="testimonial-avatar" />
+                <div className="testimonial-info">
+                  <h4>{t.name}</h4>
+                  <div className="testimonial-rating">{'⭐'.repeat(t.rating)}</div>
+                </div>
+              </div>
+              <p className="testimonial-text">"{t.text}"</p>
+            </div>
+          ))}
         </div>
       </section>
     </div>
