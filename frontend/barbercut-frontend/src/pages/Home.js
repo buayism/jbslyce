@@ -19,6 +19,8 @@ function Home() {
   const [hbError, setHbError] = useState('');
   const [reservations, setReservations] = useState([]);
   const [selectedBarber, setSelectedBarber] = useState(null);
+  const [toast, setToast] = useState(null);
+  const [editingSlot, setEditingSlot] = useState(null);
   const fmt2 = (n) => (n < 10 ? `0${n}` : String(n));
   const todayLocal = (() => { const d = new Date(); const y = d.getFullYear(); const m = fmt2(d.getMonth() + 1); const dd = fmt2(d.getDate()); return `${y}-${m}-${dd}`; })();
   const currentHHMM = () => { const d = new Date(); return `${fmt2(d.getHours())}:${fmt2(d.getMinutes())}`; };
@@ -164,6 +166,11 @@ function Home() {
   if (user?.role === 'BARBER') {
     return (
       <div className="home">
+        {toast && (
+          <div className={`toast toast-${toast.type}`}>
+            {toast.message}
+          </div>
+        )}
         <section
           className="hero"
           style={{
@@ -233,6 +240,9 @@ function Home() {
                     next.sort((a, b) => new Date(a.start) - new Date(b.start));
                     return next;
                   });
+                  // Show success toast
+                  setToast({ type: 'success', message: '✓ Slot created successfully!' });
+                  setTimeout(() => setToast(null), 3000);
                   // Move picker to the next available time (end of created)
                   const nextTime = toHHMM(new Date(created.end));
                   setSlotForm(prev => ({ ...prev, time: nextTime }));
@@ -281,40 +291,43 @@ function Home() {
               ) : slots.length === 0 ? (
                 <p className="muted">No slots yet. Create your first slot above.</p>
               ) : (
-                <div className="reservations-grid">
+                <div className="slots-grid">
                   {slots.map(s => {
                     const match = reservations.find(r => new Date(r.slot).toISOString() === new Date(s.start).toISOString());
-                    const label = new Date(s.start).toLocaleString();
+                    const startDate = new Date(s.start);
+                    const endDate = new Date(s.end);
                     const hasReservation = !!match;
+                    const isAvailable = !hasReservation;
                     return (
-                      <div key={s.id} className="reservation-card">
-                        <div className="reservation-card__content" style={{ position: 'relative', paddingRight: '60px' }}>
-                          <h3 className="reservation-card__service">{label}</h3>
-                          <div className="reservation-card__date muted">Ends: {new Date(s.end).toLocaleString()}</div>
-                          {!match ? (
-                            <div className="reservation-card__price">Status: Available</div>
-                          ) : (
-                            <div className="reservation-card__price">
-                              Status: {match.status}
-                              {match.clientUsername && (
-                                <span className="muted" style={{ marginLeft: 8 }}>
-                                  • Booked by {match.clientUsername}
-                                </span>
-                              )}
+                      <div key={s.id} className="slot-card" onClick={() => !hasReservation && setEditingSlot(s)}>
+                        <div className="slot-card__header">
+                          <div className="slot-card__time">
+                            <div className="slot-time-main">{startDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</div>
+                            <div className="slot-time-sub">{startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
+                          </div>
+                          <span className={`slot-status-badge ${isAvailable ? 'available' : 'booked'}`}>
+                            {isAvailable ? '● Available' : '● Booked'}
+                          </span>
+                        </div>
+                        <div className="slot-card__body">
+                          <div className="slot-info-row">
+                            <span className="muted">Duration:</span>
+                            <span>{Math.round((endDate - startDate) / 60000)} mins</span>
+                          </div>
+                          {match && match.clientUsername && (
+                            <div className="slot-info-row">
+                              <span className="muted">Client:</span>
+                              <span>{match.clientUsername}</span>
                             </div>
                           )}
+                        </div>
+                        <div className="slot-card__actions">
                           <button
                             className="btn btn-secondary sm"
-                            style={{
-                              position: 'absolute',
-                              top: 12,
-                              right: 12,
-                              padding: '6px 12px'
-                            }}
-                            onClick={() => handleDeleteSlot(s.id, hasReservation)}
-                            title={hasReservation ? 'Delete slot (has active reservation)' : 'Delete slot'}
+                            onClick={(e) => { e.stopPropagation(); handleDeleteSlot(s.id, hasReservation); }}
+                            title="Delete slot"
                           >
-                            🗑️
+                            🗑️ Delete
                           </button>
                         </div>
                       </div>
